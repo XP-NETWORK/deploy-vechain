@@ -61,42 +61,38 @@ export const populateArgs = (
 	const testnetBase = "https://bridge-wnftapi.herokuapp.com";
 	const mainnetBase = "https://nft.xp.network";
 
-	let nftPrefix:string;
-	let nftPrefix1155:string;
+	let nftPrefix: string;
+	let nftPrefix1155: string;
 
-	if(network == 'testnet'){
+	if (network == 'testnet') {
 		nftPrefix = `${testnetBase}/w/`;
 		nftPrefix1155 = `${testnetBase}/w/{id}`;
-	}else{
+	} else {
 		nftPrefix = `${mainnetBase}/w/`;
 		nftPrefix1155 = `${mainnetBase}/w/{id}`;
 	}
 
 	let args = [];
 
-	if(contractType == 'XPNft1155'){
+	if (contractType == 'XPNft1155') {
 		args.push(nftPrefix1155);
 		return args;
 	}
 
-	args.push(collectionName);
-	args.push(tokenTicker);
-
-	if ( contractType == "XPNft1155Royalties") {
+	if (contractType == "XPNft1155Royalties" && royaltyPercent && royaltyBeneficiary) {
 		args.push(nftPrefix1155)
-	} else {
-		args.push(nftPrefix)
-	}
-
-	if (royaltyPercent && royaltyBeneficiary) {
 		args.push([
 			royaltyBeneficiary,
 			royaltyPercent * 100
 		])
+		return args;
+	} else {
+		args.push(collectionName);
+		args.push(tokenTicker);
+		args.push(nftPrefix)
 	}
 
 	console.log("Args:", args);
-
 
 	return args;
 }
@@ -158,18 +154,18 @@ export async function deploy<T extends unknown[]>(
 
 	const testnetExplorer = "https://explore-testnet.vechain.org"
 	const mainnetExplorer = "https://vechainstats.com"
-	
-	let explorer:string;
-	let account:string;
-	let transaction:string;
-	let tx_tail:string;
 
-	if(network == 'testnet'){
+	let explorer: string;
+	let account: string;
+	let transaction: string;
+	let tx_tail: string;
+
+	if (network == 'testnet') {
 		explorer = testnetExplorer
 		account = "accounts"
 		transaction = "transactions"
 		tx_tail = "#info"
-	}else{
+	} else {
 		explorer = mainnetExplorer
 		account = "account"
 		transaction = "transaction"
@@ -177,7 +173,7 @@ export async function deploy<T extends unknown[]>(
 	}
 
 	console.log(
-		`${contract_name} deployed to:`, 
+		`${contract_name} deployed to:`,
 		`${explorer}/${account}/${contract.address}`,
 		`${explorer}/${transaction}/${contract.deployTransaction.hash}${tx_tail}`
 	);

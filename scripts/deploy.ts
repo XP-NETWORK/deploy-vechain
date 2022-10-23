@@ -31,12 +31,12 @@ async function main(
 }
 
 main(
-    /* mainnet|testnet  */ "mainnet",
-    /* Contract type    */ 'XPNft',
-    /* Collection name  */ 'Crypsense Academy Reward Cards',
-    /* Token Identifier */ 'CARC',
-    /* Beneficiary addr */ '',//0x0d7df42014064a163DfDA404253fa9f6883b9187
-    /* Royalty percent  */ 0
+    /* mainnet|testnet  */ 'testnet',
+    /* Contract type    */ 'XPNft1155Royalties',
+    /* Collection name  */ 'TestingCollection-1',
+    /* Token Identifier */ 'TC1',
+    /* Beneficiary addr */ '0x0d7df42014064a163DfDA404253fa9f6883b9187',//
+    /* Royalty percent  */ 5
 ).catch((error) => {
     console.error(error);
     process.exit(1);
