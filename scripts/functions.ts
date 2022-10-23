@@ -74,10 +74,15 @@ export const populateArgs = (
 
 	let args = [];
 
+	if(contractType == 'XPNft1155'){
+		args.push(nftPrefix1155);
+		return args;
+	}
+
 	args.push(collectionName);
 	args.push(tokenTicker);
 
-	if (contractType == "XPNft1155" || contractType == "XPNft1155Royalties") {
+	if ( contractType == "XPNft1155Royalties") {
 		args.push(nftPrefix1155)
 	} else {
 		args.push(nftPrefix)
