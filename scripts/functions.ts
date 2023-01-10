@@ -11,6 +11,16 @@ import {
 	CONTRACT_NAME,
 } from './consts'
 
+/**
+ * Console logs the arguments
+ * @param args an array of arguments
+ * @returns the arguments
+ */
+const logAndReturn = (args:any) => {
+	console.log("Args:", args);
+	return args;
+}
+
 
 /**
  * Initial settings boilerplate
@@ -45,6 +55,8 @@ export const setup = (network: NETWORK) => {
  * @param contractType one of the CONTRACTS Object Keys
  * @param collectionName the name of the NFT colleciton
  * @param tokenTicker the collection short identifier
+ * @param originalNonce the nonce of the chain of origin
+ * @param originalContract the address of the original contract
  * @param royaltyBeneficiary a royalty receiver address
  * @param royaltyPercent the precentage of royalties 1-100
  * @returns 
@@ -54,9 +66,11 @@ export const populateArgs = (
 	contractType: CONTRACT_NAME,
 	collectionName: string,
 	tokenTicker: string,
+	originalNonce: number,
+	originalContract:string,
 	royaltyBeneficiary: string,
 	royaltyPercent: number
-) => {
+): (string | (string|number)[])[] => {
 
 	const testnetBase = "https://bridge-wnftapi.herokuapp.com";
 	const mainnetBase = "https://nft.xp.network";
@@ -65,18 +79,18 @@ export const populateArgs = (
 	let nftPrefix1155: string;
 
 	if (network == 'testnet') {
-		nftPrefix = `${testnetBase}/w/`;
-		nftPrefix1155 = `${testnetBase}/w/{id}`;
+		nftPrefix = `${testnetBase}/w/dec/${originalNonce}/${originalContract}/`;
+		nftPrefix1155 = `${testnetBase}/w/${originalNonce}/${originalContract}/{id}`;
 	} else {
-		nftPrefix = `${mainnetBase}/w/`;
-		nftPrefix1155 = `${mainnetBase}/w/{id}`;
+		nftPrefix = `${mainnetBase}/w/dec/${originalNonce}/${originalContract}/`;
+		nftPrefix1155 = `${mainnetBase}/w/${originalNonce}/${originalContract}/{id}`;
 	}
 
 	let args = [];
 
 	if (contractType == 'XPNft1155') {
 		args.push(nftPrefix1155);
-		return args;
+		return logAndReturn(args);
 	}
 
 	if (contractType == "XPNft1155Royalties" && royaltyPercent && royaltyBeneficiary) {
@@ -84,17 +98,24 @@ export const populateArgs = (
 		args.push([
 			royaltyBeneficiary,
 			royaltyPercent * 100
-		])
-		return args;
+		]);
+		return logAndReturn(args);
+	} else if(contractType == "XPNFTRoyalties" && royaltyPercent && royaltyBeneficiary) {
+		args.push(collectionName);
+		args.push(tokenTicker);
+		args.push(nftPrefix)
+		args.push([
+			royaltyBeneficiary,
+			royaltyPercent * 100
+		]);
+		return logAndReturn(args);
 	} else {
 		args.push(collectionName);
 		args.push(tokenTicker);
 		args.push(nftPrefix)
 	}
 
-	console.log("Args:", args);
-
-	return args;
+	return logAndReturn(args);
 }
 
 /**

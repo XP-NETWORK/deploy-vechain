@@ -6,6 +6,8 @@ async function main(
     contractType: CONTRACT_NAME,
     collectionName: string,
     tokenTicker: string,
+    originalNonce: number,
+    originalContract:string,
     royaltyBeneficiary: string,
     royaltyPercent: number
 
@@ -16,6 +18,8 @@ async function main(
         contractType,
         collectionName,
         tokenTicker,
+        originalNonce,
+        originalContract,
         royaltyBeneficiary,
         royaltyPercent
     );
@@ -31,12 +35,14 @@ async function main(
 }
 
 main(
-    /* mainnet|testnet  */ 'testnet',
-    /* Contract type    */ 'XPNft1155Royalties',
-    /* Collection name  */ 'TestingCollection-1',
-    /* Token Identifier */ 'TC1',
-    /* Beneficiary addr */ '0x0d7df42014064a163DfDA404253fa9f6883b9187',//
-    /* Royalty percent  */ 5
+    /* mainnet|testnet   */ 'mainnet',
+    /* Contract type     */ 'XPNFTRoyalties',
+    /* Collection name   */ 'CryptoSpaceClub',
+    /* Token Identifier  */ 'CSC',
+    /* Original Nonce    */ 9,
+    /* Original Contract */ "TGkgcveyPzhzj18dtxpzaAtcL5ZUB8965A",//Tron
+    /* Beneficiary addr  */ '0xf3768EC5C19A4A84Df37499A8c40D85C103Ee580',//
+    /* Royalty percent   */ 20
 ).catch((error) => {
     console.error(error);
     process.exit(1);
